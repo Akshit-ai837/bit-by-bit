@@ -1,0 +1,67 @@
+<!-- ───────────────────────────────────────────
+  SECTION: Tab 1 — NLP Requirement Analyzer
+  File: sections/tab_nlp.html
+  Judge Criterion: NLP Precision
+─────────────────────────────────────────── -->
+
+<div id="panel-nlp" class="panel active">
+
+  <!-- Input Card -->
+  <div class="card">
+    <div class="card-title">Intelligent requirement analysis</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">
+      Describe your project vaguely — the AI will decompose it into milestones, payments, timelines, and checklists automatically.
+    </p>
+
+    <label class="field-label">Project description</label>
+    <textarea
+      id="nlp-input"
+      placeholder="e.g. Build a food delivery app with user login, restaurant listings, cart, and payment gateway"
+    ></textarea>
+
+    <div class="flex mt" style="gap:14px;align-items:flex-end;flex-wrap:wrap">
+      <div>
+        <label class="field-label">Budget (₹)</label>
+        <input type="text" id="budget-input" value="50000" style="width:130px">
+      </div>
+      <div>
+        <label class="field-label">Timeline</label>
+        <select id="timeline-input" style="width:140px">
+          <option>30 days</option>
+          <option>45 days</option>
+          <option>60 days</option>
+          <option>90 days</option>
+        </select>
+      </div>
+      <button class="btn btn-green" onclick="runNLP()" id="nlp-btn">
+        Analyze with AI
+      </button>
+    </div>
+  </div>
+
+  <!-- Output renders here -->
+  <div id="nlp-output"></div>
+
+</div>
+
+<style>
+/* NLP output milestone card */
+.nlp-ms-card{
+  border:0.5px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px;
+  margin-bottom:10px;
+  background:var(--bg2);
+}
+.nlp-ms-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:6px;
+}
+.nlp-ms-title{font-size:14px;font-weight:500}
+.nlp-ms-right{display:flex;gap:10px;align-items:center}
+.nlp-ms-days{font-size:12px;color:var(--text2)}
+.nlp-ms-pay{font-size:13px;font-weight:500;color:var(--green)}
+.nlp-ms-desc{font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.6}
+</style>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustChain AI — Login / Signup</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#ffffff;--bg2:#f7f7f5;--bg3:#f0efeb;--text:#1a1a1a;--text2:#666;--text3:#999;--border:rgba(0,0,0,0.10);--border2:rgba(0,0,0,0.18);--green:#1D9E75;--green-light:#E1F5EE;--green-dark:#0F6E56;--red:#E24B4A;--red-light:#FCEBEB;--red-dark:#791F1F;--radius:8px;--radius-lg:12px}
+body{font-family:'DM Sans',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+nav{background:var(--bg);border-bottom:0.5px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.5px;text-decoration:none;color:var(--text)}
+.logo span{color:var(--green)}
+.auth-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1rem}
+.auth-box{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);width:100%;max-width:440px;overflow:hidden}
+.auth-tabs{display:flex;border-bottom:0.5px solid var(--border)}
+.auth-tab{flex:1;padding:14px;font-size:14px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--text2);font-family:'DM Sans',sans-serif;border-bottom:2px solid transparent;transition:all 0.15s;margin-bottom:-0.5px}
+.auth-tab.active{color:var(--green);border-bottom:2px solid var(--green)}
+.auth-body{padding:2rem}
+.auth-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px}
+.auth-sub{font-size:13px;color:var(--text2);margin-bottom:1.75rem}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem}
+.role-card{border:0.5px solid var(--border2);border-radius:var(--radius);padding:14px;cursor:pointer;text-align:center;transition:all 0.15s;background:var(--bg2)}
+.role-card.selected{border-color:var(--green);background:var(--green-light)}
+.role-icon{font-size:22px;margin-bottom:6px}
+.role-name{font-size:13px;font-weight:500}
+.role-desc{font-size:11px;color:var(--text2);margin-top:2px}
+.field{margin-bottom:1.1rem}
+.field label{font-size:12px;color:var(--text2);display:block;margin-bottom:6px;font-weight:500}
+.field input,.field select{width:100%;padding:10px 12px;font-size:14px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg2);color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border 0.15s}
+.field input:focus,.field select:focus{border-color:var(--green)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.input-wrap{position:relative}
+.input-wrap input{padding-right:44px}
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text3);font-size:13px;font-family:'DM Sans',sans-serif}
+.msg{font-size:12px;padding:10px 12px;border-radius:var(--radius);margin-bottom:1rem;border:0.5px solid;display:none}
+.msg.show{display:block}
+.msg-error{background:var(--red-light);color:var(--red-dark);border-color:#F09595}
+.msg-success{background:var(--green-light);color:var(--green-dark);border-color:#5DCAA5}
+.btn-submit{width:100%;padding:12px;font-size:15px;font-weight:500;cursor:pointer;border:none;border-radius:var(--radius);background:var(--green);color:#fff;font-family:'DM Sans',sans-serif;transition:background 0.15s;margin-top:0.5rem}
+.btn-submit:hover{background:var(--green-dark)}
+.btn-submit:disabled{background:#9FE1CB;cursor:not-allowed}
+.strength-bar{height:3px;border-radius:2px;background:var(--bg3);overflow:hidden;margin:6px 0 3px}
+.strength-fill{height:100%;border-radius:2px;transition:width 0.3s,background 0.3s;width:0}
+.strength-label{font-size:11px;color:var(--text3)}
+.success-screen{padding:2.5rem 2rem;text-align:center;display:none}
+.success-screen.show{display:block}
+.success-icon{width:52px;height:52px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:22px;color:var(--green-dark)}
+.success-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:8px}
+.success-sub{font-size:13px;color:var(--text2);margin-bottom:1.5rem}
+.btn-go{display:inline-block;background:var(--green);color:#fff;padding:11px 28px;border-radius:var(--radius);font-size:14px;font-weight:500;text-decoration:none;font-family:'DM Sans',sans-serif}
+.form-panel{display:none}.form-panel.active{display:block}
+.auth-note{font-size:12px;color:var(--text3);text-align:center;margin-top:1.25rem}
+.auth-note a{color:var(--green);text-decoration:none;cursor:pointer}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Trust<span>Chain</span> AI</a>
+  <a href="index.html" style="font-size:13px;color:var(--text2);text-decoration:none">← Back to home</a>
+</nav>
+
+<div class="auth-wrap">
+  <div class="auth-box">
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">Log in</button>
+      <button class="auth-tab" onclick="switchAuthTab('signup')">Sign up</button>
+    </div>
+
+    <!-- LOGIN PANEL -->
+    <div id="panel-login" class="form-panel active">
+      <div class="auth-body">
+        <div class="auth-title">Welcome back</div>
+        <div class="auth-sub">Log in to your TrustChain AI account.</div>
+        <div id="login-msg" class="msg"></div>
+        <div class="field"><label>Email address</label><input type="email" id="login-email" placeholder="you@example.com"></div>
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap">
+            <input type="password" id="login-pw" placeholder="Enter your password">
+            <button class="pw-toggle" onclick="togglePw('login-pw',this)">Show</button>
+          </div>
+        </div>
+        <button class="btn-submit" onclick="handleLogin()" id="login-btn">Log in</button>
+        <div class="auth-note">No account? <a onclick="switchAuthTab('signup')">Sign up free</a></div>
+      </div>
+    </div>
+
+    <!-- SIGNUP PANEL -->
+    <div id="panel-signup" class="form-panel">
+      <div class="auth-body" id="signup-form-body">
+        <div class="auth-title">Create account</div>
+        <div class="auth-sub">Choose your role to get started.</div>
+        <div class="role-grid">
+          <div class="role-card selected" onclick="selectRole(this,'client')">
+            <div class="role-icon">💼</div><div class="role-name">Client</div><div class="role-desc">Post projects & hire</div>
+          </div>
+          <div class="role-card" onclick="selectRole(this,'freelancer')">
+            <div class="role-icon">🧑‍💻</div><div class="role-name">Freelancer</div><div class="role-desc">Find work & get paid</div>
+          </div>
+        </div>
+        <div id="signup-msg" class="msg"></div>
+        <div class="field-row">
+          <div class="field"><label>First name</label><input type="text" id="signup-fname" placeholder="Arjun"></div>
+          <div class="field"><label>Last name</label><input type="text" id="signup-lname" placeholder="Sharma"></div>
+        </div>
+        <div class="field"><label>Email address</label><input type="email" id="signup-email" placeholder="you@example.com"></div>
+        <div class="field" id="field-skills" style="display:none">
+          <label>Primary skill</label>
+          <select id="signup-skill">
+            <option value="">Select skill</option>
+            <option>Web Development</option><option>Mobile App Development</option>
+            <option>UI/UX Design</option><option>Content Writing</option>
+            <option>Data Science / ML</option><option>DevOps / Cloud</option>
+            <option>Graphic Design</option><option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <div class="input-wrap">
+            <input type="password" id="signup-pw" placeholder="Min 8 characters" oninput="checkStrength(this.value)">
+            <button class="pw-toggle" onclick="togglePw('signup-pw',this)">Show</button>
+          </div>
+          <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+          <div class="strength-label" id="strength-label"></div>
+        </div>
+        <div class="field">
+          <label>Confirm password</label>
+          <div class="input-wrap">
+            <input type="password" id="signup-pw2" placeholder="Repeat password">
+            <button class="pw-toggle" onclick="togglePw('signup-pw2',this)">Show</button>
+          </div>
+        </div>
+        <button class="btn-submit" onclick="handleSignup()" id="signup-btn">Create account</button>
+        <div class="auth-note">Have an account? <a onclick="switchAuthTab('login')">Log in</a></div>
+      </div>
+      <div class="success-screen" id="signup-success">
+        <div class="success-icon">✓</div>
+        <div class="success-title">Account created!</div>
+        <div class="success-sub" id="success-msg-text">Welcome to TrustChain AI.</div>
+        <a href="#" class="btn-go" id="success-btn">Go to dashboard →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="components/api.js"></script>
+<script>
+let selectedRole = 'client';
+
+if (isLoggedIn()) {
+  const u = getUser();
+  window.location.href = u?.role === 'freelancer' ? 'freelancer-dashboard.html' : 'client-dashboard.html';
+}
+
+function switchAuthTab(t) {
+  document.querySelectorAll('.auth-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[onclick="switchAuthTab('${t}')"]`).classList.add('active');
+  document.getElementById('panel-' + t).classList.add('active');
+}
+
+function selectRole(el, role) {
+  selectedRole = role;
+  document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('field-skills').style.display = role === 'freelancer' ? 'block' : 'none';
+}
+
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? 'Show' : 'Hide';
+}
+
+function checkStrength(pw) {
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  const lvl = [{w:'0%',bg:'transparent',t:''},{w:'25%',bg:'#E24B4A',t:'Weak'},{w:'50%',bg:'#EF9F27',t:'Fair'},{w:'75%',bg:'#378ADD',t:'Good'},{w:'100%',bg:'#1D9E75',t:'Strong'}];
+  document.getElementById('strength-fill').style.cssText = `width:${lvl[score].w};background:${lvl[score].bg}`;
+  document.getElementById('strength-label').textContent = pw.length ? lvl[score].t : '';
+}
+
+function showMsg(id, type, text) {
+  const el = document.getElementById(id);
+  el.className = `msg ${type} show`;
+  el.textContent = text;
+}
+
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pw = document.getElementById('login-pw').value;
+  document.getElementById('login-msg').classList.remove('show');
+  if (!email || !pw) { showMsg('login-msg','msg-error','Please fill in all fields.'); return; }
+
+  const btn = document.getElementById('login-btn');
+  btn.disabled = true; btn.textContent = 'Logging in...';
+  try {
+    const data = await apiLogin({ email, password: pw });
+    showMsg('login-msg','msg-success',`Welcome back, ${data.user.firstName}! Redirecting...`);
+    setTimeout(() => {
+      window.location.href = data.user.role === 'freelancer' ? 'freelancer-dashboard.html' : 'client-dashboard.html';
+    }, 900);
+  } catch (err) {
+    showMsg('login-msg','msg-error', err.message);
+    btn.disabled = false; btn.textContent = 'Log in';
+  }
+}
+
+async function handleSignup() {
+  const fname = document.getElementById('signup-fname').value.trim();
+  const lname = document.getElementById('signup-lname').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const pw    = document.getElementById('signup-pw').value;
+  const pw2   = document.getElementById('signup-pw2').value;
+  const skill = document.getElementById('signup-skill').value;
+  document.getElementById('signup-msg').classList.remove('show');
+
+  if (!fname||!lname||!email||!pw||!pw2) { showMsg('signup-msg','msg-error','Please fill in all fields.'); return; }
+  if (pw.length < 8) { showMsg('signup-msg','msg-error','Password must be at least 8 characters.'); return; }
+  if (pw !== pw2) { showMsg('signup-msg','msg-error','Passwords do not match.'); return; }
+  if (selectedRole === 'freelancer' && !skill) { showMsg('signup-msg','msg-error','Please select your skill.'); return; }
+
+  const btn = document.getElementById('signup-btn');
+  btn.disabled = true; btn.textContent = 'Creating account...';
+  try {
+    const data = await apiRegister({ firstName:fname, lastName:lname, email, password:pw, role:selectedRole, skill });
+    document.getElementById('signup-form-body').style.display = 'none';
+    document.getElementById('success-msg-text').textContent = `Welcome, ${fname}! Your ${selectedRole} account is ready.`;
+    document.getElementById('success-btn').href = data.user.role === 'freelancer' ? 'freelancer-dashboard.html' : 'client-dashboard.html';
+    document.getElementById('signup-success').classList.add('show');
+  } catch (err) {
+    showMsg('signup-msg','msg-error', err.message);
+    btn.disabled = false; btn.textContent = 'Create account';
+  }
+}
+</script>
+</body>
+</html>

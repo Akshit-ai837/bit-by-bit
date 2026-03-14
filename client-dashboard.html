@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustChain AI — Client Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#f0efeb;
+  --text:#1a1a1a;--text2:#666;--text3:#999;
+  --border:rgba(0,0,0,0.10);--border2:rgba(0,0,0,0.18);
+  --green:#1D9E75;--green-light:#E1F5EE;--green-dark:#0F6E56;--green-mid:#5DCAA5;
+  --blue:#378ADD;--blue-light:#E6F1FB;--blue-dark:#0C447C;
+  --amber:#EF9F27;--amber-light:#FAEEDA;--amber-dark:#633806;
+  --red:#E24B4A;--red-light:#FCEBEB;--red-dark:#791F1F;
+  --radius:8px;--radius-lg:12px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh}
+
+/* NAV */
+.topnav{background:var(--bg);border-bottom:0.5px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.5px;text-decoration:none;color:var(--text)}
+.logo span{color:var(--green)}
+.nav-right{display:flex;align-items:center;gap:14px}
+.nav-badge-role{background:var(--blue-light);color:var(--blue-dark);font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--green-dark);cursor:pointer}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 56px)}
+
+/* SIDEBAR */
+.sidebar{background:var(--bg);border-right:0.5px solid var(--border);padding:1.5rem 0}
+.sidebar-section{margin-bottom:1.5rem}
+.sidebar-label{font-size:11px;font-weight:500;color:var(--text3);letter-spacing:0.8px;padding:0 1.25rem;margin-bottom:6px;text-transform:uppercase}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 1.25rem;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:all 0.15s;text-decoration:none}
+.sidebar-item:hover{color:var(--text);background:var(--bg2)}
+.sidebar-item.active{color:var(--green);background:var(--green-light);border-left:2px solid var(--green)}
+.sidebar-icon{font-size:15px;width:18px;text-align:center}
+.sidebar-count{margin-left:auto;background:var(--green);color:#fff;font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px}
+
+/* MAIN */
+.main{padding:2rem;overflow-y:auto}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:10px}
+.page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px}
+.page-sub{font-size:13px;color:var(--text2);margin-top:2px}
+
+/* PANELS */
+.panel{display:none}.panel.active{display:block}
+
+/* CARDS */
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem}
+.card-title{font-size:15px;font-weight:500;margin-bottom:14px}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:1.5rem}
+.stat{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem}
+.stat-label{font-size:12px;color:var(--text2);margin-bottom:6px}
+.stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800}
+.stat-green{color:var(--green)}
+.stat-blue{color:var(--blue)}
+.stat-amber{color:var(--amber)}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* PROJECT CARDS */
+.project-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:10px;cursor:pointer;transition:border 0.15s}
+.project-card:hover{border-color:var(--green)}
+.project-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:10px}
+.project-name{font-size:15px;font-weight:500}
+.project-meta{font-size:12px;color:var(--text2);margin-top:3px}
+.project-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.project-amount{font-size:14px;font-weight:500;color:var(--green)}
+.progress-row{display:flex;align-items:center;gap:10px}
+.progress-wrap{flex:1;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--green);border-radius:3px}
+.progress-pct{font-size:12px;color:var(--text2);min-width:32px;text-align:right}
+.project-footer{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+
+/* BADGES */
+.badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.b-green{background:var(--green-light);color:var(--green-dark)}
+.b-amber{background:var(--amber-light);color:var(--amber-dark)}
+.b-blue{background:var(--blue-light);color:var(--blue-dark)}
+.b-red{background:var(--red-light);color:var(--red-dark)}
+.b-gray{background:var(--bg2);color:var(--text2);border:0.5px solid var(--border)}
+
+/* BUTTONS */
+.btn{padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;border-radius:var(--radius);font-family:'DM Sans',sans-serif;transition:all 0.15s;border:none}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:var(--green-dark)}
+.btn-outline{background:transparent;color:var(--text);border:0.5px solid var(--border2)}
+.btn-outline:hover{background:var(--bg2)}
+.btn-sm{padding:6px 14px;font-size:12px}
+
+/* FORM */
+.field{margin-bottom:1rem}
+.field label{font-size:12px;color:var(--text2);display:block;margin-bottom:5px;font-weight:500}
+.field input,.field textarea,.field select{width:100%;padding:9px 12px;font-size:14px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg2);color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border 0.15s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--green);background:var(--bg)}
+.field textarea{min-height:80px;resize:vertical}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* MILESTONE TABLE */
+.ms-table{width:100%;border-collapse:collapse}
+.ms-table th{font-size:11px;color:var(--text3);font-weight:500;text-align:left;padding:8px 10px;border-bottom:0.5px solid var(--border);text-transform:uppercase;letter-spacing:0.5px}
+.ms-table td{font-size:13px;padding:10px 10px;border-bottom:0.5px solid var(--border);vertical-align:middle}
+.ms-table tr:last-child td{border:none}
+.ms-table tr:hover td{background:var(--bg2)}
+
+/* ACTIVITY FEED */
+.activity-item{display:flex;gap:12px;padding:12px 0;border-bottom:0.5px solid var(--border)}
+.activity-item:last-child{border:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.dot-green{background:var(--green)}
+.dot-amber{background:var(--amber)}
+.dot-blue{background:var(--blue)}
+.dot-red{background:var(--red)}
+.activity-text{font-size:13px;line-height:1.5}
+.activity-time{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* POST PROJECT FORM */
+.form-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem;max-width:640px}
+.form-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:4px}
+.form-sub{font-size:13px;color:var(--text2);margin-bottom:1.5rem}
+.ai-hint{background:var(--green-light);border:0.5px solid var(--green-mid);border-radius:var(--radius);padding:10px 14px;font-size:12px;color:var(--green-dark);margin-bottom:1rem;line-height:1.6}
+
+/* ESCROW VAULT */
+.vault-card{background:var(--bg2);border-radius:var(--radius-lg);padding:1.5rem;border:0.5px solid var(--border);margin-bottom:1rem}
+.vault-amount{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--green)}
+.vault-label{font-size:13px;color:var(--text2);margin-top:4px}
+.vault-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1rem}
+.vault-item{background:var(--bg);border-radius:var(--radius);padding:12px;text-align:center;border:0.5px solid var(--border)}
+.vault-item-val{font-size:18px;font-weight:500;color:var(--text)}
+.vault-item-label{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* LOADING */
+.loading{color:var(--text2);font-size:13px;padding:10px 0}
+.dot-anim{display:inline-block;animation:blink 1.2s infinite}
+.dot-anim:nth-child(2){animation-delay:.2s}
+.dot-anim:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* MSG */
+.msg{font-size:13px;padding:10px 14px;border-radius:var(--radius);border:0.5px solid;margin-top:10px;display:none}
+.msg.show{display:block}
+.msg-success{background:var(--green-light);color:var(--green-dark);border-color:var(--green-mid)}
+.msg-error{background:var(--red-light);color:var(--red-dark);border-color:#F09595}
+
+@media(max-width:768px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <a href="index.html" class="logo">Trust<span>Chain</span> AI</a>
+  <div class="nav-right">
+    <span class="nav-badge-role">Client</span>
+    <div class="avatar">RC</div>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Main</div>
+      <a class="sidebar-item active" onclick="showPanel('overview')">
+        <span class="sidebar-icon">▦</span> Overview
+      </a>
+      <a class="sidebar-item" onclick="showPanel('projects')">
+        <span class="sidebar-icon">📁</span> My Projects
+        <span class="sidebar-count">3</span>
+      </a>
+      <a class="sidebar-item" onclick="showPanel('post')">
+        <span class="sidebar-icon">＋</span> Post a Project
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Finances</div>
+      <a class="sidebar-item" onclick="showPanel('escrow')">
+        <span class="sidebar-icon">🔒</span> Escrow Vault
+      </a>
+      <a class="sidebar-item" onclick="showPanel('payments')">
+        <span class="sidebar-icon">💳</span> Payments
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Account</div>
+      <a class="sidebar-item" href="auth.html">
+        <span class="sidebar-icon">→</span> Log out
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- ── OVERVIEW ── -->
+    <div id="panel-overview" class="panel active">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Good morning, Rahul 👋</div>
+          <div class="page-sub">Here's what's happening with your projects today.</div>
+        </div>
+        <button class="btn btn-green" onclick="showPanel('post')">+ Post new project</button>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-label">Active projects</div><div class="stat-val stat-blue">3</div><div class="stat-sub">2 on track</div></div>
+        <div class="stat"><div class="stat-label">Total in escrow</div><div class="stat-val stat-green">₹1,40,000</div><div class="stat-sub">Across all projects</div></div>
+        <div class="stat"><div class="stat-label">Released this month</div><div class="stat-val stat-green">₹45,000</div><div class="stat-sub">3 milestones</div></div>
+        <div class="stat"><div class="stat-label">Pending milestones</div><div class="stat-val stat-amber">5</div><div class="stat-sub">Awaiting AI check</div></div>
+      </div>
+
+      <!-- Active projects -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div class="card-title" style="margin:0">Active projects</div>
+          <button class="btn btn-outline btn-sm" onclick="showPanel('projects')">View all</button>
+        </div>
+
+        <div class="project-card" onclick="showPanel('projects')">
+          <div class="project-card-top">
+            <div>
+              <div class="project-name">E-commerce Website</div>
+              <div class="project-meta">Freelancer: Arjun S. · Started 12 days ago</div>
+            </div>
+            <div class="project-right">
+              <span class="badge b-green">On track</span>
+              <span class="project-amount">₹50,000</span>
+            </div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-wrap"><div class="progress-fill" style="width:60%"></div></div>
+            <div class="progress-pct">60%</div>
+          </div>
+          <div class="project-footer">
+            <span class="badge b-gray">3/5 milestones done</span>
+            <span class="badge b-blue">₹30,000 released</span>
+          </div>
+        </div>
+
+        <div class="project-card" onclick="showPanel('projects')">
+          <div class="project-card-top">
+            <div>
+              <div class="project-name">Mobile App — Food Delivery</div>
+              <div class="project-meta">Freelancer: Priya M. · Started 5 days ago</div>
+            </div>
+            <div class="project-right">
+              <span class="badge b-amber">In progress</span>
+              <span class="project-amount">₹80,000</span>
+            </div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-wrap"><div class="progress-fill" style="width:25%"></div></div>
+            <div class="progress-pct">25%</div>
+          </div>
+          <div class="project-footer">
+            <span class="badge b-gray">1/4 milestones done</span>
+            <span class="badge b-blue">₹20,000 released</span>
+          </div>
+        </div>
+
+        <div class="project-card" onclick="showPanel('projects')">
+          <div class="project-card-top">
+            <div>
+              <div class="project-name">Company Blog & Content</div>
+              <div class="project-meta">Freelancer: Sneha R. · Started 2 days ago</div>
+            </div>
+            <div class="project-right">
+              <span class="badge b-blue">Just started</span>
+              <span class="project-amount">₹10,000</span>
+            </div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-wrap"><div class="progress-fill" style="width:10%"></div></div>
+            <div class="progress-pct">10%</div>
+          </div>
+          <div class="project-footer">
+            <span class="badge b-gray">0/3 milestones done</span>
+            <span class="badge b-blue">₹0 released</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity feed -->
+      <div class="card">
+        <div class="card-title">Recent activity</div>
+        <div class="activity-item">
+          <div class="activity-dot dot-green"></div>
+          <div><div class="activity-text">Milestone 3 <strong>verified by AI</strong> — ₹10,000 released to Arjun S.</div><div class="activity-time">2 hours ago</div></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot dot-amber"></div>
+          <div><div class="activity-text">Priya M. submitted Milestone 1 — <strong>AI quality check in progress</strong></div><div class="activity-time">5 hours ago</div></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot dot-blue"></div>
+          <div><div class="activity-text">New project <strong>Company Blog & Content</strong> created with 3 milestones</div><div class="activity-time">2 days ago</div></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot dot-green"></div>
+          <div><div class="activity-text">Milestone 2 <strong>verified by AI</strong> — ₹15,000 released to Arjun S.</div><div class="activity-time">3 days ago</div></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot dot-red"></div>
+          <div><div class="activity-text">Milestone 1 for Food Delivery App <strong>partially completed</strong> — feedback sent</div><div class="activity-time">4 days ago</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROJECTS ── -->
+    <div id="panel-projects" class="panel">
+      <div class="page-header">
+        <div>
+          <div class="page-title">My Projects</div>
+          <div class="page-sub">Track milestones, payments and AI verifications.</div>
+        </div>
+        <button class="btn btn-green" onclick="showPanel('post')">+ Post new project</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">E-commerce Website — Milestone tracker</div>
+        <table class="ms-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Milestone</th><th>Payment</th><th>Deadline</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>UI Design & Wireframes</td><td>₹8,000</td><td>Day 5</td><td><span class="badge b-green">Released</span></td></tr>
+            <tr><td>2</td><td>Frontend Development</td><td>₹12,000</td><td>Day 12</td><td><span class="badge b-green">Released</span></td></tr>
+            <tr><td>3</td><td>Backend & Database</td><td>₹15,000</td><td>Day 20</td><td><span class="badge b-green">Released</span></td></tr>
+            <tr><td>4</td><td>Payment Integration</td><td>₹10,000</td><td>Day 26</td><td><span class="badge b-amber">In review</span></td></tr>
+            <tr><td>5</td><td>Testing & Deployment</td><td>₹5,000</td><td>Day 30</td><td><span class="badge b-gray">Locked</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Mobile App — Food Delivery — Milestone tracker</div>
+        <table class="ms-table">
+          <thead>
+            <tr><th>#</th><th>Milestone</th><th>Payment</th><th>Deadline</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>App Architecture & Auth</td><td>₹20,000</td><td>Day 7</td><td><span class="badge b-green">Released</span></td></tr>
+            <tr><td>2</td><td>Restaurant Listing UI</td><td>₹20,000</td><td>Day 18</td><td><span class="badge b-amber">Submitted</span></td></tr>
+            <tr><td>3</td><td>Cart & Order System</td><td>₹25,000</td><td>Day 30</td><td><span class="badge b-gray">Locked</span></td></tr>
+            <tr><td>4</td><td>Payment & Delivery Track</td><td>₹15,000</td><td>Day 40</td><td><span class="badge b-gray">Locked</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── POST PROJECT ── -->
+    <div id="panel-post" class="panel">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Post a new project</div>
+          <div class="page-sub">Describe your project and AI will generate milestones automatically.</div>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <div class="ai-hint">
+          AI will read your description and auto-generate milestones, timeline, and escrow payment splits. The more detail you provide, the better the breakdown.
+        </div>
+
+        <div class="field">
+          <label>Project title</label>
+          <input type="text" id="proj-title" placeholder="e.g. Build a React dashboard for analytics">
+        </div>
+        <div class="field">
+          <label>Project description</label>
+          <textarea id="proj-desc" placeholder="Describe what you need in detail — features, tech stack, deliverables..."></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Budget (₹)</label>
+            <input type="text" id="proj-budget" value="50000">
+          </div>
+          <div class="field">
+            <label>Timeline</label>
+            <select id="proj-timeline">
+              <option>30 days</option><option>45 days</option><option>60 days</option><option>90 days</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <select id="proj-cat">
+            <option>Web Development</option>
+            <option>Mobile App</option>
+            <option>UI/UX Design</option>
+            <option>Content Writing</option>
+            <option>Data Science / ML</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <button class="btn btn-green" onclick="postProject()" id="post-btn" style="width:100%;padding:12px;font-size:14px">
+          Generate milestones with AI & Post
+        </button>
+        <div id="post-msg" class="msg"></div>
+      </div>
+
+      <div id="post-result"></div>
+    </div>
+
+    <!-- ── ESCROW ── -->
+    <div id="panel-escrow" class="panel">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Escrow Vault</div>
+          <div class="page-sub">All your funds locked, tracked, and released automatically by AI.</div>
+        </div>
+      </div>
+
+      <div class="vault-card">
+        <div class="vault-label">Total locked in escrow</div>
+        <div class="vault-amount">₹1,40,000</div>
+        <div class="vault-grid">
+          <div class="vault-item"><div class="vault-item-val" style="color:var(--green)">₹45,000</div><div class="vault-item-label">Released</div></div>
+          <div class="vault-item"><div class="vault-item-val" style="color:var(--amber)">₹90,000</div><div class="vault-item-label">Locked</div></div>
+          <div class="vault-item"><div class="vault-item-val" style="color:var(--red)">₹5,000</div><div class="vault-item-label">Refunded</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Per-project escrow breakdown</div>
+        <table class="ms-table">
+          <thead>
+            <tr><th>Project</th><th>Total</th><th>Released</th><th>Locked</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>E-commerce Website</td><td>₹50,000</td><td>₹35,000</td><td>₹15,000</td><td><span class="badge b-green">Active</span></td></tr>
+            <tr><td>Mobile App — Food Delivery</td><td>₹80,000</td><td>₹20,000</td><td>₹60,000</td><td><span class="badge b-amber">In progress</span></td></tr>
+            <tr><td>Company Blog & Content</td><td>₹10,000</td><td>₹0</td><td>₹10,000</td><td><span class="badge b-blue">Just started</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── PAYMENTS ── -->
+    <div id="panel-payments" class="panel">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Payment history</div>
+          <div class="page-sub">All automated milestone payments.</div>
+        </div>
+      </div>
+      <div class="card">
+        <table class="ms-table">
+          <thead>
+            <tr><th>Date</th><th>Project</th><th>Milestone</th><th>Freelancer</th><th>Amount</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>12 Mar</td><td>E-commerce</td><td>Backend & DB</td><td>Arjun S.</td><td style="color:var(--green);font-weight:500">₹15,000</td><td><span class="badge b-green">Released</span></td></tr>
+            <tr><td>08 Mar</td><td>E-commerce</td><td>Frontend Dev</td><td>Arjun S.</td><td style="color:var(--green);font-weight:500">₹12,000</td><td><span class="badge b-green">Released</span></td></tr>
+            <tr><td>05 Mar</td><td>Food Delivery</td><td>App Auth</td><td>Priya M.</td><td style="color:var(--green);font-weight:500">₹20,000</td><td><span class="badge b-green">Released</span></td></tr>
+            <tr><td>02 Mar</td><td>E-commerce</td><td>UI Design</td><td>Arjun S.</td><td style="color:var(--green);font-weight:500">₹8,000</td><td><span class="badge b-green">Released</span></td></tr>
+            <tr><td>28 Feb</td><td>Old Project</td><td>Milestone 1</td><td>Rahul K.</td><td style="color:var(--red);font-weight:500">₹5,000</td><td><span class="badge b-red">Refunded</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const API_URL = "https://api.anthropic.com/v1/messages";
+
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  const match = document.querySelector(`[onclick="showPanel('${id}')"]`);
+  if (match) match.classList.add('active');
+}
+
+async function postProject() {
+  const title  = document.getElementById('proj-title').value.trim();
+  const desc   = document.getElementById('proj-desc').value.trim();
+  const budget = parseInt(document.getElementById('proj-budget').value) || 50000;
+  if (!title || !desc) {
+    const msg = document.getElementById('post-msg');
+    msg.className = 'msg msg-error show';
+    msg.textContent = 'Please fill in the project title and description.';
+    return;
+  }
+  const btn = document.getElementById('post-btn');
+  btn.disabled = true; btn.textContent = 'AI generating milestones...';
+  document.getElementById('post-result').innerHTML = `<div class="loading" style="margin-top:1rem">AI is generating your project roadmap<span class="dot-anim">.</span><span class="dot-anim">.</span><span class="dot-anim">.</span></div>`;
+
+  try {
+    const prompt = `You are an AI project manager. Analyze: "${desc}". Budget: ₹${budget}.
+Return ONLY valid JSON:
+{"milestones":[{"name":"string","description":"string","days":number,"payment":number,"checklist":["item1","item2","item3"]}]}
+Generate 4-5 milestones. Payments must sum to ${budget}. Be specific.`;
+    const r = await fetch(API_URL, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000, messages:[{role:'user',content:prompt}] })
+    });
+    const d = await r.json();
+    const text = d.content.map(c => c.text||'').join('');
+    const ms = JSON.parse(text.replace(/```json|```/g,'').trim()).milestones;
+    let html = `<div class="card" style="max-width:640px">
+      <div class="card-title">AI-generated milestones for "${title}"</div>`;
+    ms.forEach((m,i) => {
+      html += `<div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:8px;background:var(--bg2)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <div style="font-size:14px;font-weight:500">M${i+1}: ${m.name}</div>
+          <div style="font-size:13px;color:var(--green);font-weight:500">₹${m.payment.toLocaleString()} · ${m.days}d</div>
+        </div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:6px">${m.description}</div>
+        <div>${m.checklist.map(c=>`<span style="display:inline-block;background:var(--bg);border:0.5px solid var(--border);border-radius:20px;padding:2px 9px;font-size:11px;color:var(--text2);margin:2px">${c}</span>`).join('')}</div>
+      </div>`;
+    });
+    html += `<button class="btn btn-green" style="width:100%;margin-top:8px" onclick="confirmPost()">Confirm & Lock funds in escrow</button></div>`;
+    document.getElementById('post-result').innerHTML = html;
+    document.getElementById('post-msg').className = 'msg msg-success show';
+    document.getElementById('post-msg').textContent = 'Milestones generated! Review and confirm to lock funds in escrow.';
+  } catch(e) {
+    document.getElementById('post-result').innerHTML = '';
+    document.getElementById('post-msg').className = 'msg msg-error show';
+    document.getElementById('post-msg').textContent = 'Error: ' + e.message;
+  }
+  btn.disabled = false; btn.textContent = 'Generate milestones with AI & Post';
+}
+
+function confirmPost() {
+  document.getElementById('post-result').innerHTML = `<div class="card" style="max-width:640px;text-align:center;padding:2rem">
+    <div style="width:52px;height:52px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:22px;color:var(--green-dark)">✓</div>
+    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px">Project posted successfully!</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1.25rem">Funds locked in escrow. Freelancers can now bid on your project.</div>
+    <button class="btn btn-green" onclick="showPanel('projects')">View my projects →</button>
+  </div>`;
+}
+</script>
+</body>
+</html>

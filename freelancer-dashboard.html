@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustChain AI — Freelancer Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#ffffff;--bg2:#f7f7f5;--bg3:#f0efeb;
+  --text:#1a1a1a;--text2:#666;--text3:#999;
+  --border:rgba(0,0,0,0.10);--border2:rgba(0,0,0,0.18);
+  --green:#1D9E75;--green-light:#E1F5EE;--green-dark:#0F6E56;--green-mid:#5DCAA5;
+  --blue:#378ADD;--blue-light:#E6F1FB;--blue-dark:#0C447C;
+  --amber:#EF9F27;--amber-light:#FAEEDA;--amber-dark:#633806;
+  --red:#E24B4A;--red-light:#FCEBEB;--red-dark:#791F1F;
+  --purple:#7F77DD;--purple-light:#EEEDFE;--purple-dark:#3C3489;
+  --radius:8px;--radius-lg:12px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh}
+
+/* NAV */
+.topnav{background:var(--bg);border-bottom:0.5px solid var(--border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;letter-spacing:-0.5px;text-decoration:none;color:var(--text)}
+.logo span{color:var(--green)}
+.nav-right{display:flex;align-items:center;gap:14px}
+.nav-badge-role{background:var(--purple-light);color:var(--purple-dark);font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--purple-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--purple-dark);cursor:pointer}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 56px)}
+
+/* SIDEBAR */
+.sidebar{background:var(--bg);border-right:0.5px solid var(--border);padding:1.5rem 0}
+.sidebar-section{margin-bottom:1.5rem}
+.sidebar-label{font-size:11px;font-weight:500;color:var(--text3);letter-spacing:0.8px;padding:0 1.25rem;margin-bottom:6px;text-transform:uppercase}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 1.25rem;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border-left:2px solid transparent;transition:all 0.15s;text-decoration:none}
+.sidebar-item:hover{color:var(--text);background:var(--bg2)}
+.sidebar-item.active{color:var(--green);background:var(--green-light);border-left:2px solid var(--green)}
+.sidebar-icon{font-size:15px;width:18px;text-align:center}
+.sidebar-count{margin-left:auto;background:var(--green);color:#fff;font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px}
+
+/* MAIN */
+.main{padding:2rem;overflow-y:auto}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.75rem;flex-wrap:wrap;gap:10px}
+.page-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px}
+.page-sub{font-size:13px;color:var(--text2);margin-top:2px}
+
+/* PANELS */
+.panel{display:none}.panel.active{display:block}
+
+/* CARDS */
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem}
+.card-title{font-size:15px;font-weight:500;margin-bottom:14px}
+
+/* STAT GRID */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:1.5rem}
+.stat{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem}
+.stat-label{font-size:12px;color:var(--text2);margin-bottom:6px}
+.stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:4px}
+
+/* PFI CARD */
+.pfi-hero{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem;display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:center}
+.pfi-score-big{font-family:'Syne',sans-serif;font-size:52px;font-weight:800;color:var(--green);line-height:1}
+.pfi-score-label{font-size:12px;color:var(--text2);margin-top:4px}
+.pfi-tier{display:inline-block;background:var(--green-light);color:var(--green-dark);font-size:12px;font-weight:500;padding:4px 14px;border-radius:20px;margin-bottom:10px}
+.pfi-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pfi-metric{background:var(--bg2);border-radius:var(--radius);padding:10px 12px}
+.pfi-metric-val{font-size:18px;font-weight:500;color:var(--green)}
+.pfi-metric-label{font-size:11px;color:var(--text2);margin-top:2px}
+.pfi-bar-wrap{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin:8px 0 4px}
+.pfi-bar-fill{height:100%;border-radius:3px;background:var(--green)}
+
+/* PROJECT CARDS */
+.project-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:10px}
+.project-name{font-size:15px;font-weight:500;margin-bottom:4px}
+.project-client{font-size:12px;color:var(--text2);margin-bottom:10px}
+.project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:12px}
+.project-stat{text-align:center;background:var(--bg2);border-radius:var(--radius);padding:8px}
+.project-stat-val{font-size:15px;font-weight:500;color:var(--green)}
+.project-stat-label{font-size:11px;color:var(--text3);margin-top:2px}
+.progress-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.progress-wrap{flex:1;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--green);border-radius:3px}
+.progress-pct{font-size:12px;color:var(--text2);min-width:32px;text-align:right}
+
+/* BADGES */
+.badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.b-green{background:var(--green-light);color:var(--green-dark)}
+.b-amber{background:var(--amber-light);color:var(--amber-dark)}
+.b-blue{background:var(--blue-light);color:var(--blue-dark)}
+.b-red{background:var(--red-light);color:var(--red-dark)}
+.b-gray{background:var(--bg2);color:var(--text2);border:0.5px solid var(--border)}
+.b-purple{background:var(--purple-light);color:var(--purple-dark)}
+
+/* BUTTONS */
+.btn{padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;border-radius:var(--radius);font-family:'DM Sans',sans-serif;transition:all 0.15s;border:none}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:var(--green-dark)}
+.btn-green:disabled{background:#9FE1CB;cursor:not-allowed}
+.btn-outline{background:transparent;color:var(--text);border:0.5px solid var(--border2)}
+.btn-outline:hover{background:var(--bg2)}
+.btn-sm{padding:6px 14px;font-size:12px}
+
+/* FORM */
+.field{margin-bottom:1rem}
+.field label{font-size:12px;color:var(--text2);display:block;margin-bottom:5px;font-weight:500}
+.field input,.field textarea,.field select{width:100%;padding:9px 12px;font-size:14px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg2);color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border 0.15s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--green);background:var(--bg)}
+.field textarea{min-height:80px;resize:vertical}
+
+/* TABLE */
+.ms-table{width:100%;border-collapse:collapse}
+.ms-table th{font-size:11px;color:var(--text3);font-weight:500;text-align:left;padding:8px 10px;border-bottom:0.5px solid var(--border);text-transform:uppercase;letter-spacing:0.5px}
+.ms-table td{font-size:13px;padding:10px;border-bottom:0.5px solid var(--border);vertical-align:middle}
+.ms-table tr:last-child td{border:none}
+.ms-table tr:hover td{background:var(--bg2)}
+
+/* ACTIVITY */
+.activity-item{display:flex;gap:12px;padding:12px 0;border-bottom:0.5px solid var(--border)}
+.activity-item:last-child{border:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.dot-green{background:var(--green)}
+.dot-amber{background:var(--amber)}
+.dot-blue{background:var(--blue)}
+.dot-red{background:var(--red)}
+.activity-text{font-size:13px;line-height:1.5}
+.activity-time{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* SUBMIT WORK */
+.submit-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;max-width:640px}
+.aqa-result{padding:12px 16px;border-radius:var(--radius);font-size:13px;line-height:1.7;margin-top:10px;border:0.5px solid;display:none}
+.aqa-result.show{display:block}
+.aqa-pass{background:var(--green-light);color:var(--green-dark);border-color:var(--green-mid)}
+.aqa-partial{background:var(--amber-light);color:var(--amber-dark);border-color:var(--amber)}
+.aqa-fail{background:var(--red-light);color:var(--red-dark);border-color:#F09595}
+
+/* LOADING */
+.loading{color:var(--text2);font-size:13px;padding:10px 0}
+.dot-anim{display:inline-block;animation:blink 1.2s infinite}
+.dot-anim:nth-child(2){animation-delay:.2s}
+.dot-anim:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* BROWSE PROJECTS */
+.browse-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:10px;transition:border 0.15s}
+.browse-card:hover{border-color:var(--green)}
+.browse-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:10px}
+.browse-title{font-size:15px;font-weight:500}
+.browse-budget{font-size:14px;font-weight:500;color:var(--green)}
+.browse-desc{font-size:13px;color:var(--text2);margin-bottom:10px;line-height:1.5}
+.browse-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+@media(max-width:768px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .pfi-hero{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <a href="index.html" class="logo">Trust<span>Chain</span> AI</a>
+  <div class="nav-right">
+    <span class="nav-badge-role">Freelancer</span>
+    <div class="avatar">AS</div>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Main</div>
+      <a class="sidebar-item active" onclick="showPanel('overview')">
+        <span class="sidebar-icon">▦</span> Overview
+      </a>
+      <a class="sidebar-item" onclick="showPanel('projects')">
+        <span class="sidebar-icon">📁</span> My Projects
+        <span class="sidebar-count">2</span>
+      </a>
+      <a class="sidebar-item" onclick="showPanel('submit')">
+        <span class="sidebar-icon">⬆</span> Submit Work
+      </a>
+      <a class="sidebar-item" onclick="showPanel('browse')">
+        <span class="sidebar-icon">🔍</span> Browse Projects
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Reputation</div>
+      <a class="sidebar-item" onclick="showPanel('pfi')">
+        <span class="sidebar-icon">★</span> My PFI Score
+      </a>
+      <a class="sidebar-item" onclick="showPanel('earnings')">
+        <span class="sidebar-icon">💰</span> Earnings
+      </a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Account</div>
+      <a class="sidebar-item" href="auth.html">
+        <span class="sidebar-icon">→</span> Log out
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ── OVERVIEW ── -->
+    <div id="panel-overview" class="panel active">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Welcome back, Arjun 👋</div>
+          <div class="page-sub">You have 1 milestone pending submission.</div>
+        </div>
+        <button class="btn btn-green" onclick="showPanel('browse')">Browse projects</button>
+      </div>
+
+      <!-- PFI quick view -->
+      <div style="background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+        <div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:4px">Your PFI Score</div>
+          <div style="font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--green);line-height:1">850</div>
+          <div style="margin-top:6px"><span class="badge b-green">Elite freelancer</span></div>
+        </div>
+        <div style="flex:1;max-width:320px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="background:var(--bg2);border-radius:var(--radius);padding:10px;text-align:center"><div style="font-size:16px;font-weight:500;color:var(--green)">92%</div><div style="font-size:11px;color:var(--text3)">Accuracy</div></div>
+            <div style="background:var(--bg2);border-radius:var(--radius);padding:10px;text-align:center"><div style="font-size:16px;font-weight:500;color:var(--green)">95%</div><div style="font-size:11px;color:var(--text3)">On time</div></div>
+            <div style="background:var(--bg2);border-radius:var(--radius);padding:10px;text-align:center"><div style="font-size:16px;font-weight:500;color:var(--green)">12</div><div style="font-size:11px;color:var(--text3)">Completed</div></div>
+            <div style="background:var(--bg2);border-radius:var(--radius);padding:10px;text-align:center"><div style="font-size:16px;font-weight:500;color:var(--green)">0</div><div style="font-size:11px;color:var(--text3)">Disputes</div></div>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="showPanel('pfi')">Full report →</button>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-label">Active projects</div><div class="stat-val" style="color:var(--blue)">2</div><div class="stat-sub">1 milestone due soon</div></div>
+        <div class="stat"><div class="stat-label">Earned this month</div><div class="stat-val" style="color:var(--green)">₹25,000</div><div class="stat-sub">2 milestones</div></div>
+        <div class="stat"><div class="stat-label">Pending payment</div><div class="stat-val" style="color:var(--amber)">₹10,000</div><div class="stat-sub">Awaiting AI check</div></div>
+        <div class="stat"><div class="stat-label">Total earned</div><div class="stat-val" style="color:var(--green)">₹1,85,000</div><div class="stat-sub">Lifetime</div></div>
+      </div>
+
+      <!-- Current milestones -->
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <div class="card-title" style="margin:0">Pending milestone submissions</div>
+        </div>
+        <div style="border:0.5px solid var(--amber);background:var(--amber-light);border-radius:var(--radius);padding:14px;margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+            <div>
+              <div style="font-size:14px;font-weight:500">M4: Payment Integration</div>
+              <div style="font-size:12px;color:var(--amber-dark);margin-top:3px">E-commerce Website · Due in 4 days</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span style="font-size:13px;font-weight:500;color:var(--green)">₹10,000</span>
+              <button class="btn btn-green btn-sm" onclick="showPanel('submit')">Submit work</button>
+            </div>
+          </div>
+        </div>
+        <div style="border:0.5px solid var(--border);background:var(--bg2);border-radius:var(--radius);padding:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+            <div>
+              <div style="font-size:14px;font-weight:500">M2: Restaurant Listing UI</div>
+              <div style="font-size:12px;color:var(--text2);margin-top:3px">Food Delivery App · Due in 12 days</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <span style="font-size:13px;font-weight:500;color:var(--green)">₹20,000</span>
+              <span class="badge b-gray">Not started</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity -->
+      <div class="card">
+        <div class="card-title">Recent activity</div>
+        <div class="activity-item">
+          <div class="activity-dot dot-green"></div>
+          <div><div class="activity-text"><strong>₹15,000 received</strong> — Backend & DB milestone verified by AI</div><div class="activity-time">2 days ago</div></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot dot-blue"></div>
+          <div><div class="activity-text">AI feedback received on <strong>Milestone 3</strong> — minor revisions requested</div><div class="activity-time">3 days ago</div></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot dot-green"></div>
+          <div><div class="activity-text"><strong>PFI score updated</strong> to 850 — on-time delivery bonus applied</div><div class="activity-time">5 days ago</div></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot dot-green"></div>
+          <div><div class="activity-text"><strong>₹12,000 received</strong> — Frontend Dev milestone fully verified</div><div class="activity-time">8 days ago</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MY PROJECTS ── -->
+    <div id="panel-projects" class="panel">
+      <div class="page-header">
+        <div><div class="page-title">My Projects</div><div class="page-sub">Your active freelance engagements.</div></div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">E-commerce Website</div>
+        <div class="project-client">Client: Rahul C. · Posted 12 days ago</div>
+        <div class="project-grid">
+          <div class="project-stat"><div class="project-stat-val">₹50,000</div><div class="project-stat-label">Total value</div></div>
+          <div class="project-stat"><div class="project-stat-val">₹35,000</div><div class="project-stat-label">Earned so far</div></div>
+          <div class="project-stat"><div class="project-stat-val">3/5</div><div class="project-stat-label">Milestones done</div></div>
+          <div class="project-stat"><div class="project-stat-val">Day 26</div><div class="project-stat-label">Next deadline</div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-wrap"><div class="progress-fill" style="width:60%"></div></div>
+          <div class="progress-pct">60%</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge b-green">On track</span>
+          <span class="badge b-amber">1 milestone pending</span>
+          <button class="btn btn-outline btn-sm" onclick="showPanel('submit')" style="margin-left:auto">Submit next milestone</button>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-name">Mobile App — Food Delivery</div>
+        <div class="project-client">Client: Meera S. · Posted 5 days ago</div>
+        <div class="project-grid">
+          <div class="project-stat"><div class="project-stat-val">₹80,000</div><div class="project-stat-label">Total value</div></div>
+          <div class="project-stat"><div class="project-stat-val">₹20,000</div><div class="project-stat-label">Earned so far</div></div>
+          <div class="project-stat"><div class="project-stat-val">1/4</div><div class="project-stat-label">Milestones done</div></div>
+          <div class="project-stat"><div class="project-stat-val">Day 18</div><div class="project-stat-label">Next deadline</div></div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-wrap"><div class="progress-fill" style="width:25%"></div></div>
+          <div class="progress-pct">25%</div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge b-blue">In progress</span>
+          <span class="badge b-gray">Next: Restaurant Listing UI</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SUBMIT WORK ── -->
+    <div id="panel-submit" class="panel">
+      <div class="page-header">
+        <div><div class="page-title">Submit milestone work</div><div class="page-sub">AI will verify your submission automatically.</div></div>
+      </div>
+
+      <div class="submit-card">
+        <div class="field">
+          <label>Select project & milestone</label>
+          <select id="submit-ms">
+            <option value="code">E-commerce Website — M4: Payment Integration (₹10,000)</option>
+            <option value="code">Food Delivery App — M2: Restaurant Listing UI (₹20,000)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Deliverable type</label>
+          <select id="submit-type">
+            <option value="code">Code / Software</option>
+            <option value="content">Content / Writing</option>
+            <option value="design">Design / UI-UX</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Describe what you've built / delivered</label>
+          <textarea id="submit-desc" placeholder="e.g. Integrated Razorpay payment gateway. Added success/failure webhook handlers. Wrote unit tests covering all payment flows. Handled edge cases for card decline and timeout."></textarea>
+        </div>
+        <div class="field">
+          <label>GitHub / delivery link (optional)</label>
+          <input type="text" id="submit-link" placeholder="https://github.com/your-repo">
+        </div>
+        <button class="btn btn-green" onclick="submitWork()" id="submit-btn" style="width:100%;padding:12px">
+          Submit for AI verification
+        </button>
+        <div id="submit-result" style="margin-top:10px"></div>
+      </div>
+    </div>
+
+    <!-- ── BROWSE PROJECTS ── -->
+    <div id="panel-browse" class="panel">
+      <div class="page-header">
+        <div><div class="page-title">Browse projects</div><div class="page-sub">Open projects matching your skills.</div></div>
+      </div>
+
+      <div class="browse-card">
+        <div class="browse-top">
+          <div><div class="browse-title">React Admin Dashboard</div><span class="badge b-blue">Web Development</span></div>
+          <div class="browse-budget">₹35,000</div>
+        </div>
+        <div class="browse-desc">Need a clean admin dashboard with charts, user management, and data export. 4 milestones. Timeline: 25 days.</div>
+        <div class="browse-footer">
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge b-gray">React</span><span class="badge b-gray">Chart.js</span><span class="badge b-gray">REST API</span></div>
+          <button class="btn btn-green btn-sm">Apply now</button>
+        </div>
+      </div>
+
+      <div class="browse-card">
+        <div class="browse-top">
+          <div><div class="browse-title">Node.js REST API for SaaS</div><span class="badge b-purple">Backend</span></div>
+          <div class="browse-budget">₹60,000</div>
+        </div>
+        <div class="browse-desc">Build a scalable REST API with JWT auth, role-based access, Stripe integration, and PostgreSQL. 5 milestones.</div>
+        <div class="browse-footer">
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge b-gray">Node.js</span><span class="badge b-gray">PostgreSQL</span><span class="badge b-gray">Stripe</span></div>
+          <button class="btn btn-green btn-sm">Apply now</button>
+        </div>
+      </div>
+
+      <div class="browse-card">
+        <div class="browse-top">
+          <div><div class="browse-title">UI/UX Design for FinTech App</div><span class="badge b-amber" style="background:var(--amber-light);color:var(--amber-dark)">Design</span></div>
+          <div class="browse-budget">₹25,000</div>
+        </div>
+        <div class="browse-desc">Design complete Figma screens for a personal finance tracking app. 3 milestones. Mobile-first approach required.</div>
+        <div class="browse-footer">
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge b-gray">Figma</span><span class="badge b-gray">Mobile UI</span><span class="badge b-gray">Design System</span></div>
+          <button class="btn btn-green btn-sm">Apply now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PFI SCORE ── -->
+    <div id="panel-pfi" class="panel">
+      <div class="page-header">
+        <div><div class="page-title">My PFI Score</div><div class="page-sub">Your professional reputation on TrustChain AI.</div></div>
+      </div>
+
+      <div class="pfi-hero">
+        <div>
+          <div class="pfi-tier">Elite Freelancer</div>
+          <div class="pfi-score-big">850</div>
+          <div class="pfi-score-label">out of 1000 · Top 5% on platform</div>
+          <div style="margin-top:1rem" class="pfi-breakdown">
+            <div class="pfi-metric"><div class="pfi-metric-val">92%</div><div class="pfi-metric-label">Milestone accuracy</div></div>
+            <div class="pfi-metric"><div class="pfi-metric-val">95%</div><div class="pfi-metric-label">Deadline adherence</div></div>
+            <div class="pfi-metric"><div class="pfi-metric-val">12</div><div class="pfi-metric-label">Projects completed</div></div>
+            <div class="pfi-metric"><div class="pfi-metric-val">0</div><div class="pfi-metric-label">Disputes raised</div></div>
+          </div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px">Score breakdown</div>
+          <div style="width:120px">
+            <div style="font-size:12px;color:var(--text2);margin-bottom:4px;text-align:left">Accuracy (40%)</div>
+            <div class="pfi-bar-wrap"><div class="pfi-bar-fill" style="width:92%"></div></div>
+            <div style="font-size:12px;color:var(--text2);margin-bottom:4px;text-align:left">Deadlines (30%)</div>
+            <div class="pfi-bar-wrap"><div class="pfi-bar-fill" style="width:95%"></div></div>
+            <div style="font-size:12px;color:var(--text2);margin-bottom:4px;text-align:left">Disputes (20%)</div>
+            <div class="pfi-bar-wrap"><div class="pfi-bar-fill" style="width:100%"></div></div>
+            <div style="font-size:12px;color:var(--text2);margin-bottom:4px;text-align:left">AI rating (10%)</div>
+            <div class="pfi-bar-wrap"><div class="pfi-bar-fill" style="width:88%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">PFI score history</div>
+        <table class="ms-table">
+          <thead><tr><th>Date</th><th>Event</th><th>Change</th><th>Score</th></tr></thead>
+          <tbody>
+            <tr><td>12 Mar</td><td>Milestone completed on time</td><td style="color:var(--green)">+15</td><td style="font-weight:500">850</td></tr>
+            <tr><td>08 Mar</td><td>High AI quality score (94/100)</td><td style="color:var(--green)">+10</td><td style="font-weight:500">835</td></tr>
+            <tr><td>02 Mar</td><td>Milestone completed on time</td><td style="color:var(--green)">+15</td><td style="font-weight:500">825</td></tr>
+            <tr><td>25 Feb</td><td>Partial submission — revision needed</td><td style="color:var(--amber)">-5</td><td style="font-weight:500">810</td></tr>
+            <tr><td>18 Feb</td><td>Milestone completed early</td><td style="color:var(--green)">+20</td><td style="font-weight:500">815</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── EARNINGS ── -->
+    <div id="panel-earnings" class="panel">
+      <div class="page-header">
+        <div><div class="page-title">Earnings</div><div class="page-sub">All payments received via AI escrow.</div></div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-label">This month</div><div class="stat-val" style="color:var(--green)">₹25,000</div></div>
+        <div class="stat"><div class="stat-label">Last month</div><div class="stat-val" style="color:var(--green)">₹48,000</div></div>
+        <div class="stat"><div class="stat-label">Total lifetime</div><div class="stat-val" style="color:var(--green)">₹1,85,000</div></div>
+        <div class="stat"><div class="stat-label">Pending release</div><div class="stat-val" style="color:var(--amber)">₹10,000</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Payment history</div>
+        <table class="ms-table">
+          <thead><tr><th>Date</th><th>Project</th><th>Milestone</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>12 Mar</td><td>E-commerce</td><td>Backend & DB</td><td style="color:var(--green);font-weight:500">₹15,000</td><td><span class="badge b-green">Paid</span></td></tr>
+            <tr><td>08 Mar</td><td>E-commerce</td><td>Frontend Dev</td><td style="color:var(--green);font-weight:500">₹12,000</td><td><span class="badge b-green">Paid</span></td></tr>
+            <tr><td>05 Mar</td><td>Food Delivery</td><td>App Auth</td><td style="color:var(--green);font-weight:500">₹20,000</td><td><span class="badge b-green">Paid</span></td></tr>
+            <tr><td>02 Mar</td><td>E-commerce</td><td>UI Design</td><td style="color:var(--green);font-weight:500">₹8,000</td><td><span class="badge b-green">Paid</span></td></tr>
+            <tr><td>Now</td><td>E-commerce</td><td>Payment Integration</td><td style="color:var(--amber);font-weight:500">₹10,000</td><td><span class="badge b-amber">Pending</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="components/api.js"></script>
+<script src="freelancer-dashboard.js"></script>
+</body>
+</html>

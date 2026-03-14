@@ -1,0 +1,108 @@
+<!-- ───────────────────────────────────────────
+  COMPONENT: Hero Section
+  File: components/hero.html
+─────────────────────────────────────────── -->
+
+<section class="hero">
+  <div class="hero-badge">Autonomous AI Intermediary — Live Demo</div>
+  <h1>Freelancing,<br><span class="hero-accent">without the trust gap.</span></h1>
+  <p class="hero-sub">
+    AI manages projects, verifies work quality, and releases payments
+    automatically — with zero human intervention.
+  </p>
+  <div class="hero-btns">
+    <button class="btn btn-green" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">
+      Try live demo
+    </button>
+    <button class="btn btn-outline">View architecture</button>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-val">NLP</div>
+      <div class="hero-stat-label">Requirement analysis</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">AQA</div>
+      <div class="hero-stat-label">Automated quality check</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">PFI</div>
+      <div class="hero-stat-label">Freelancer credit score</div>
+    </div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">0</div>
+      <div class="hero-stat-label">Manual disputes</div>
+    </div>
+  </div>
+</section>
+
+<style>
+.hero{
+  background:var(--bg);
+  border-bottom:0.5px solid var(--border);
+  padding:4rem 2rem 3rem;
+  text-align:center;
+}
+.hero-badge{
+  display:inline-block;
+  background:var(--green-light);
+  color:var(--green-dark);
+  font-size:12px;
+  font-weight:500;
+  padding:5px 16px;
+  border-radius:20px;
+  margin-bottom:1.25rem;
+}
+.hero-accent{color:var(--green)}
+.hero-sub{
+  font-size:16px;
+  color:var(--text2);
+  max-width:520px;
+  margin:1rem auto 1.75rem;
+  font-weight:300;
+}
+.hero-btns{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-bottom:3rem;
+}
+.hero-stats{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:0;
+  flex-wrap:wrap;
+  border:0.5px solid var(--border);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  max-width:640px;
+  margin:0 auto;
+}
+.hero-stat{
+  flex:1;
+  padding:1.25rem 1rem;
+  text-align:center;
+  min-width:120px;
+}
+.hero-stat-divider{width:0.5px;background:var(--border);align-self:stretch}
+.hero-stat-val{
+  font-family:'Syne',sans-serif;
+  font-size:26px;
+  font-weight:800;
+  color:var(--green);
+}
+.hero-stat-label{font-size:11px;color:var(--text2);margin-top:3px}
+
+@media(max-width:600px){
+  .hero{padding:2.5rem 1rem 2rem}
+  .hero-stats{max-width:100%}
+  .hero-stat-divider{display:none}
+  .hero-stat{border-bottom:0.5px solid var(--border)}
+}
+</style>

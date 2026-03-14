@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#ffffff;
+  --bg2:#f7f7f5;
+  --bg3:#f0efeb;
+  --text:#1a1a1a;
+  --text2:#666666;
+  --text3:#999999;
+  --border:rgba(0,0,0,0.10);
+  --border2:rgba(0,0,0,0.18);
+  --green:#1D9E75;
+  --green-light:#E1F5EE;
+  --green-dark:#0F6E56;
+  --green-mid:#5DCAA5;
+  --blue:#378ADD;
+  --blue-light:#E6F1FB;
+  --blue-dark:#0C447C;
+  --amber:#EF9F27;
+  --amber-light:#FAEEDA;
+  --amber-dark:#633806;
+  --red:#E24B4A;
+  --red-light:#FCEBEB;
+  --red-dark:#791F1F;
+  --radius:8px;
+  --radius-lg:12px;
+  --radius-xl:16px;
+}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg3);
+  color:var(--text);
+  min-height:100vh;
+  font-size:15px;
+  line-height:1.6;
+}
+
+/* ── TYPOGRAPHY ── */
+h1,h2,h3{font-family:'Syne',sans-serif;letter-spacing:-0.5px}
+h1{font-size:clamp(32px,5vw,56px);font-weight:800;letter-spacing:-2px;line-height:1.08}
+h2{font-size:clamp(22px,3vw,32px);font-weight:700;line-height:1.2}
+h3{font-size:16px;font-weight:700}
+p{color:var(--text2);line-height:1.7}
+
+/* ── LAYOUT ── */
+.container{max-width:960px;margin:0 auto;padding:0 1.5rem}
+.main-content{padding:2rem 0}
+
+/* ── CARDS ── */
+.card{
+  background:var(--bg);
+  border:0.5px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:1.5rem;
+  margin-bottom:1rem;
+}
+.card-title{font-size:15px;font-weight:500;margin-bottom:14px}
+
+/* ── FORM ELEMENTS ── */
+.field-label{font-size:12px;color:var(--text2);display:block;margin-bottom:6px}
+textarea,input[type=text],select{
+  width:100%;
+  padding:10px 12px;
+  font-size:14px;
+  border:0.5px solid var(--border2);
+  border-radius:var(--radius);
+  background:var(--bg2);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  outline:none;
+  transition:border 0.15s;
+}
+textarea:focus,input:focus,select:focus{border-color:var(--green)}
+textarea{min-height:90px;resize:vertical}
+select{cursor:pointer}
+
+/* ── BUTTONS ── */
+.btn{
+  padding:10px 22px;
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  border-radius:var(--radius);
+  font-family:'DM Sans',sans-serif;
+  transition:all 0.15s;
+  border:none;
+}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:var(--green-dark)}
+.btn-green:disabled{background:#9FE1CB;cursor:not-allowed}
+.btn-outline{background:transparent;color:var(--text);border:0.5px solid var(--border2)}
+.btn-outline:hover{background:var(--bg2)}
+
+/* ── BADGES ── */
+.badge{display:inline-block;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.b-green{background:var(--green-light);color:var(--green-dark)}
+.b-amber{background:var(--amber-light);color:var(--amber-dark)}
+.b-red{background:var(--red-light);color:var(--red-dark)}
+.b-blue{background:var(--blue-light);color:var(--blue-dark)}
+.b-gray{background:var(--bg2);color:var(--text2);border:0.5px solid var(--border)}
+
+/* ── CHIPS ── */
+.chip{display:inline-block;background:var(--bg2);border:0.5px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;color:var(--text2);margin:2px}
+.chip-green{background:var(--green-light);color:var(--green-dark);border-color:var(--green-mid)}
+.chip-red{background:var(--red-light);color:var(--red-dark);border-color:#F09595}
+
+/* ── STAT GRID ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1rem}
+.stat{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;text-align:center}
+.stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--green)}
+.stat-label{font-size:12px;color:var(--text2);margin-top:4px}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{height:8px;background:var(--bg2);border-radius:4px;overflow:hidden;margin:6px 0 14px}
+.progress-fill{height:100%;background:var(--green);border-radius:4px;transition:width 0.7s ease}
+
+/* ── MILESTONE ROW ── */
+.ms-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:0.5px solid var(--border)}
+.ms-row:last-child{border:none}
+.ms-num{font-size:11px;color:var(--text3);min-width:22px}
+.ms-name{flex:1;font-size:14px;font-weight:500}
+.ms-amount{font-size:13px;color:var(--green);font-weight:500;min-width:80px;text-align:right}
+.ms-status{min-width:90px;text-align:right}
+
+/* ── MILESTONE CARD ── */
+.ms-card{border:0.5px solid var(--border);border-radius:var(--radius);padding:12px;margin-bottom:8px}
+.ms-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.ms-card-title{font-size:14px;font-weight:500}
+.ms-card-meta{font-size:12px;color:var(--text2);margin-bottom:8px}
+
+/* ── AQA RESULT BOXES ── */
+.aqa-box{padding:12px 16px;border-radius:var(--radius);font-size:13px;line-height:1.7;margin-top:10px;border:0.5px solid}
+.aqa-pass{background:var(--green-light);color:var(--green-dark);border-color:var(--green-mid)}
+.aqa-partial{background:var(--amber-light);color:var(--amber-dark);border-color:var(--amber)}
+.aqa-fail{background:var(--red-light);color:var(--red-dark);border-color:#F09595}
+
+/* ── PFI ROWS ── */
+.pfi-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.pfi-name{width:95px;font-size:14px;font-weight:500}
+.pfi-right{flex:1;display:flex;flex-direction:column;gap:4px}
+.pfi-bar-bg{height:8px;background:var(--bg2);border-radius:4px;overflow:hidden}
+.pfi-bar{height:100%;border-radius:4px;transition:width 0.6s ease}
+.pfi-meta{font-size:11px;color:var(--text3)}
+.pfi-score{font-size:15px;font-weight:500;min-width:36px;text-align:right}
+
+/* ── UTILITIES ── */
+.flex{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.mt{margin-top:10px}
+.mb{margin-bottom:10px}
+.mt2{margin-top:1rem}
+.loading{color:var(--text2);font-size:13px;padding:12px 0}
+.dot{display:inline-block;animation:blink 1.2s infinite}
+.dot:nth-child(2){animation-delay:0.2s}
+.dot:nth-child(3){animation-delay:0.4s}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .container{padding:0 1rem}
+  h1{font-size:32px}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+}

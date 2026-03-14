@@ -1,0 +1,61 @@
+<!-- ───────────────────────────────────────────
+  SECTION: Tab 3 — Automated Quality Assurance
+  File: sections/tab_aqa.html
+  Judge Criterion: Verification Logic
+─────────────────────────────────────────── -->
+
+<div id="panel-aqa" class="panel">
+
+  <!-- Input Card -->
+  <div class="card">
+    <div class="card-title">Automated quality assurance (AQA)</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:16px">
+      Paste what the freelancer submitted. AI evaluates it against the milestone checklist and decides: 
+      <strong>fully completed</strong>, <strong>partially done</strong>, or <strong>unmet</strong>.
+    </p>
+
+    <label class="field-label">Deliverable type</label>
+    <select id="aqa-type" class="mb">
+      <option value="code">Code / Software development</option>
+      <option value="content">Content / Writing</option>
+      <option value="design">Design / UI-UX</option>
+    </select>
+
+    <label class="field-label">Submitted work description</label>
+    <textarea
+      id="aqa-input"
+      placeholder="e.g. I built the login API with JWT auth. POST /login and POST /register endpoints are working. Unit tests pass with 95% coverage. Error handling added for invalid credentials and expired tokens."
+    ></textarea>
+
+    <div class="mt">
+      <button class="btn btn-green" onclick="runAQA()" id="aqa-btn">
+        Run AI quality check
+      </button>
+    </div>
+  </div>
+
+  <!-- AQA Result renders here -->
+  <div id="aqa-output"></div>
+
+</div>
+
+<style>
+/* AQA score display */
+.aqa-score-wrap{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+.aqa-score-big{
+  font-family:'Syne',sans-serif;
+  font-size:32px;
+  font-weight:800;
+  line-height:1;
+}
+.aqa-score-sub{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* Check item pills */
+.check-section{margin-bottom:12px}
+.check-label{font-size:12px;color:var(--text2);margin-bottom:6px}
+</style>

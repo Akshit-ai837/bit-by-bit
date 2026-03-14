@@ -1,0 +1,65 @@
+<!-- ───────────────────────────────────────────
+  SECTION: Tab 2 — Autonomous Escrow Vault
+  File: sections/tab_escrow.html
+  Judge Criterion: Financial Integrity
+─────────────────────────────────────────── -->
+
+<div id="panel-escrow" class="panel">
+
+  <!-- Stats Row -->
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="stat-val" id="e-total">₹0</div>
+      <div class="stat-label">Total locked in escrow</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="e-released">₹0</div>
+      <div class="stat-label">Released to freelancer</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="e-refunded">₹0</div>
+      <div class="stat-label">Refunded to employer</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="e-ms-done">0/0</div>
+      <div class="stat-label">Milestones completed</div>
+    </div>
+  </div>
+
+  <!-- Vault Breakdown -->
+  <div class="card">
+    <div class="card-title">Escrow vault — milestone breakdown</div>
+    <div id="escrow-milestones">
+      <div style="font-size:13px;color:var(--text2)">
+        Run the NLP Analyzer first to load milestones into escrow.
+      </div>
+    </div>
+  </div>
+
+  <!-- Trigger Action -->
+  <div class="card" id="escrow-action-card" style="display:none">
+    <div class="card-title">Simulate milestone verification & payment trigger</div>
+
+    <label class="field-label">Select milestone</label>
+    <select id="ms-select" class="mb"></select>
+
+    <label class="field-label mt2">Verification result</label>
+    <select id="ms-result" class="mb">
+      <option value="full">Fully completed — release payment instantly</option>
+      <option value="partial">Partially completed — hold funds & send feedback</option>
+      <option value="unmet">Unmet — initiate employer refund</option>
+    </select>
+
+    <button class="btn btn-green" onclick="releaseMilestone()">
+      Trigger AI verification
+    </button>
+
+    <div id="release-msg" class="mt"></div>
+  </div>
+
+</div>
+
+<style>
+/* Escrow-specific overrides */
+#escrow-action-card select{margin-bottom:10px}
+</style>

@@ -1,0 +1,58 @@
+<!-- ───────────────────────────────────────────
+  COMPONENT: Navbar
+  File: components/navbar.html
+─────────────────────────────────────────── -->
+
+<nav class="navbar">
+  <div class="nav-logo">Trust<span>Chain</span> AI</div>
+  <div class="nav-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#pfi">PFI Score</a>
+  </div>
+  <div class="nav-badge">Cognigence · IIT Roorkee 2025</div>
+</nav>
+
+<style>
+.navbar{
+  background:var(--bg);
+  border-bottom:0.5px solid var(--border);
+  padding:1rem 2rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;
+  font-size:20px;
+  font-weight:800;
+  letter-spacing:-0.5px;
+}
+.nav-logo span{color:var(--green)}
+
+.nav-links{display:flex;gap:1.75rem}
+.nav-links a{
+  font-size:14px;
+  color:var(--text2);
+  text-decoration:none;
+  transition:color 0.15s;
+}
+.nav-links a:hover{color:var(--green)}
+
+.nav-badge{
+  background:var(--green-light);
+  color:var(--green-dark);
+  font-size:11px;
+  font-weight:500;
+  padding:5px 14px;
+  border-radius:20px;
+}
+
+@media(max-width:600px){
+  .navbar{padding:1rem}
+  .nav-links{display:none}
+}
+</style>

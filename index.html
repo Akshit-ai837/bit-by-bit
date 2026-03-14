@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrustChain AI — Cognigence 2025 · IIT Roorkee</title>
+
+<!-- Global Styles -->
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ① NAVBAR -->
+<!-- File: components/navbar.html -->
+<nav class="navbar">
+  <div class="nav-logo">Trust<span>Chain</span> AI</div>
+  <div class="nav-links">
+    <a href="#demo">Live Demo</a>
+    <a href="client-dashboard.html">Client</a>
+    <a href="freelancer-dashboard.html">Freelancer</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <a href="auth.html" style="font-size:13px;color:var(--text2);text-decoration:none;padding:7px 16px;border:0.5px solid var(--border2);border-radius:var(--radius);font-family:'DM Sans',sans-serif">Log in</a>
+    <a href="auth.html" style="font-size:13px;color:#fff;text-decoration:none;padding:7px 16px;background:var(--green);border-radius:var(--radius);font-family:'DM Sans',sans-serif">Sign up</a>
+  </div>
+</nav>
+
+<!-- ② HERO -->
+<!-- File: components/hero.html -->
+<section class="hero">
+  <div class="hero-badge">Autonomous AI Intermediary — Live Demo</div>
+  <h1>Freelancing,<br><span class="hero-accent">without the trust gap.</span></h1>
+  <p class="hero-sub">AI manages projects, verifies work quality, and releases payments automatically — with zero human intervention.</p>
+  <div class="hero-btns">
+    <button class="btn btn-green" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Try live demo</button>
+    <a href="auth.html" class="btn btn-outline" style="text-decoration:none">Login / Signup</a>
+  </div>
+  <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px">
+    <a href="client-dashboard.html" style="font-size:13px;color:var(--green);text-decoration:none;padding:7px 16px;border:0.5px solid var(--green);border-radius:8px;font-family:'DM Sans',sans-serif">View Client Dashboard →</a>
+    <a href="freelancer-dashboard.html" style="font-size:13px;color:var(--green);text-decoration:none;padding:7px 16px;border:0.5px solid var(--green);border-radius:8px;font-family:'DM Sans',sans-serif">View Freelancer Dashboard →</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-val">NLP</div><div class="hero-stat-label">Requirement analysis</div></div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat"><div class="hero-stat-val">AQA</div><div class="hero-stat-label">Automated quality check</div></div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat"><div class="hero-stat-val">PFI</div><div class="hero-stat-label">Freelancer credit score</div></div>
+    <div class="hero-stat-divider"></div>
+    <div class="hero-stat"><div class="hero-stat-val">0</div><div class="hero-stat-label">Manual disputes</div></div>
+  </div>
+</section>
+
+<!-- ③ TAB NAV + DEMO PANELS -->
+<!-- File: components/tabs.html -->
+<div id="demo">
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('nlp')"><span class="tab-num">01</span> NLP Analyzer</button>
+      <button class="tab" onclick="switchTab('escrow')"><span class="tab-num">02</span> Escrow Vault</button>
+      <button class="tab" onclick="switchTab('aqa')"><span class="tab-num">03</span> Quality Check</button>
+      <button class="tab" onclick="switchTab('pfi')"><span class="tab-num">04</span> PFI Score</button>
+    </div>
+  </div>
+
+  <div class="container main-content">
+
+    <!-- ④ TAB 1: NLP ANALYZER -->
+    <!-- File: sections/tab_nlp.html -->
+    <div id="panel-nlp" class="panel active">
+      <div class="card">
+        <div class="card-title">Intelligent requirement analysis</div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Describe your project vaguely — AI will decompose it into milestones, payments, timelines, and checklists automatically.</p>
+        <label class="field-label">Project description</label>
+        <textarea id="nlp-input" placeholder="e.g. Build a food delivery app with user login, restaurant listings, cart, and payment gateway"></textarea>
+        <div class="flex mt" style="gap:14px;align-items:flex-end;flex-wrap:wrap">
+          <div>
+            <label class="field-label">Budget (₹)</label>
+            <input type="text" id="budget-input" value="50000" style="width:130px">
+          </div>
+          <div>
+            <label class="field-label">Timeline</label>
+            <select id="timeline-input" style="width:140px">
+              <option>30 days</option><option>45 days</option><option>60 days</option><option>90 days</option>
+            </select>
+          </div>
+          <button class="btn btn-green" onclick="runNLP()" id="nlp-btn">Analyze with AI</button>
+        </div>
+      </div>
+      <div id="nlp-output"></div>
+    </div>
+
+    <!-- ⑤ TAB 2: ESCROW VAULT -->
+    <!-- File: sections/tab_escrow.html -->
+    <div id="panel-escrow" class="panel">
+      <div class="stat-grid">
+        <div class="stat"><div class="stat-val" id="e-total">₹0</div><div class="stat-label">Total locked</div></div>
+        <div class="stat"><div class="stat-val" id="e-released">₹0</div><div class="stat-label">Released to freelancer</div></div>
+        <div class="stat"><div class="stat-val" id="e-refunded">₹0</div><div class="stat-label">Refunded to employer</div></div>
+        <div class="stat"><div class="stat-val" id="e-ms-done">0/0</div><div class="stat-label">Milestones done</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Escrow vault — milestone breakdown</div>
+        <div id="escrow-milestones"><div style="font-size:13px;color:var(--text2)">Run the NLP Analyzer first to load milestones into escrow.</div></div>
+      </div>
+      <div class="card" id="escrow-action-card" style="display:none">
+        <div class="card-title">Simulate milestone verification & payment trigger</div>
+        <label class="field-label">Select milestone</label>
+        <select id="ms-select" class="mb"></select>
+        <label class="field-label mt2">Verification result</label>
+        <select id="ms-result" class="mb">
+          <option value="full">Fully completed — release payment instantly</option>
+          <option value="partial">Partially completed — hold funds & send feedback</option>
+          <option value="unmet">Unmet — initiate employer refund</option>
+        </select>
+        <button class="btn btn-green" onclick="releaseMilestone()">Trigger AI verification</button>
+        <div id="release-msg" class="mt"></div>
+      </div>
+    </div>
+
+    <!-- ⑥ TAB 3: QUALITY CHECK (AQA) -->
+    <!-- File: sections/tab_aqa.html -->
+    <div id="panel-aqa" class="panel">
+      <div class="card">
+        <div class="card-title">Automated quality assurance (AQA)</div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Paste what the freelancer submitted. AI evaluates it and decides: <strong>fully completed</strong>, <strong>partially done</strong>, or <strong>unmet</strong>.</p>
+        <label class="field-label">Deliverable type</label>
+        <select id="aqa-type" class="mb">
+          <option value="code">Code / Software development</option>
+          <option value="content">Content / Writing</option>
+          <option value="design">Design / UI-UX</option>
+        </select>
+        <label class="field-label">Submitted work description</label>
+        <textarea id="aqa-input" placeholder="e.g. I built the login API with JWT auth. POST /login and POST /register endpoints are working. Unit tests pass with 95% coverage."></textarea>
+        <div class="mt">
+          <button class="btn btn-green" onclick="runAQA()" id="aqa-btn">Run AI quality check</button>
+        </div>
+      </div>
+      <div id="aqa-output"></div>
+    </div>
+
+    <!-- ⑦ TAB 4: PFI SCORE -->
+    <!-- File: sections/tab_pfi.html -->
+    <div id="panel-pfi" class="panel" id="pfi">
+      <div class="card">
+        <div class="card-title">Professional Fidelity Index — freelancer credit scores</div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Dynamic reputation score based on milestone accuracy, deadline adherence, disputes, and AI quality ratings.</p>
+        <div id="pfi-list"></div>
+        <div class="pfi-legend">
+          <span class="badge b-green">800+ Elite</span>
+          <span class="badge b-blue">700–799 Trusted</span>
+          <span class="badge b-gray">600–699 Standard</span>
+          <span class="badge b-red">Below 600 At Risk</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Simulate a milestone outcome — watch PFI update live</div>
+        <div class="flex mb" style="align-items:flex-end;gap:14px">
+          <div style="flex:1">
+            <label class="field-label">Freelancer</label>
+            <select id="pfi-freelancer">
+              <option>Arjun S.</option><option>Priya M.</option><option>Rahul K.</option><option>Sneha R.</option>
+            </select>
+          </div>
+          <div style="flex:2">
+            <label class="field-label">Milestone outcome</label>
+            <select id="pfi-outcome">
+              <option value="full">Fully completed (on time) → +15 pts</option>
+              <option value="partial">Partially completed → -5 pts</option>
+              <option value="late">Completed but late → -8 pts</option>
+              <option value="unmet">Unmet — dispute raised → -25 pts</option>
+            </select>
+          </div>
+          <div><button class="btn btn-green" onclick="updatePFI()">Update score</button></div>
+        </div>
+        <div id="pfi-msg" style="font-size:13px;color:var(--text2)"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">How PFI is calculated</div>
+        <div class="pfi-formula-grid">
+          <div class="pfi-factor"><div class="pfi-factor-label">Milestone accuracy</div><div class="pfi-factor-weight">40%</div></div>
+          <div class="pfi-factor"><div class="pfi-factor-label">Deadline adherence</div><div class="pfi-factor-weight">30%</div></div>
+          <div class="pfi-factor"><div class="pfi-factor-label">Dispute history</div><div class="pfi-factor-weight">20%</div></div>
+          <div class="pfi-factor"><div class="pfi-factor-label">AI quality rating</div><div class="pfi-factor-weight">10%</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+</div><!-- /demo -->
+
+<!-- ⑧ FOOTER -->
+<!-- File: components/footer.html -->
+<footer class="footer">
+  <div class="footer-logo">Trust<span>Chain</span> AI</div>
+  <div class="footer-tagline">Autonomous AI Intermediary · Cognigence Hackathon · IIT Roorkee 2025</div>
+  <div class="footer-criteria">
+    <span class="badge b-green">NLP Precision</span>
+    <span class="badge b-blue">Verification Logic</span>
+    <span class="badge b-amber" style="background:var(--amber-light);color:var(--amber-dark)">Financial Integrity</span>
+    <span class="badge b-gray">PFI Scoring</span>
+  </div>
+</footer>
+
+<!-- ⑨ JAVASCRIPT -->
+<!-- File: components/api.js -->
+<script src="components/api.js"></script>
+<!-- File: js/main.js -->
+<script src="js/main.js"></script>
+
+<!-- Extra styles for components not in styles.css -->
+<style>
+.navbar{background:var(--bg);border-bottom:0.5px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.5px}
+.nav-logo span{color:var(--green)}
+.nav-links{display:flex;gap:1.75rem}
+.nav-links a{font-size:14px;color:var(--text2);text-decoration:none}
+.nav-links a:hover{color:var(--green)}
+.nav-badge{background:var(--green-light);color:var(--green-dark);font-size:11px;font-weight:500;padding:5px 14px;border-radius:20px}
+.hero{background:var(--bg);border-bottom:0.5px solid var(--border);padding:4rem 2rem 3rem;text-align:center}
+.hero-badge{display:inline-block;background:var(--green-light);color:var(--green-dark);font-size:12px;font-weight:500;padding:5px 16px;border-radius:20px;margin-bottom:1.25rem}
+.hero-accent{color:var(--green)}
+.hero-sub{font-size:16px;color:var(--text2);max-width:520px;margin:1rem auto 1.75rem;font-weight:300}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
+.hero-stats{display:flex;justify-content:center;align-items:center;border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;max-width:640px;margin:0 auto}
+.hero-stat{flex:1;padding:1.25rem 1rem;text-align:center;min-width:120px}
+.hero-stat-divider{width:0.5px;background:var(--border);align-self:stretch}
+.hero-stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--green)}
+.hero-stat-label{font-size:11px;color:var(--text2);margin-top:3px}
+.tabs-wrap{background:var(--bg);border-bottom:0.5px solid var(--border);padding:0 1.5rem;position:sticky;top:57px;z-index:90}
+.tabs{display:flex;max-width:960px;margin:0 auto}
+.tab{display:flex;align-items:center;gap:8px;padding:14px 20px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:2px solid transparent;font-family:'DM Sans',sans-serif;transition:all 0.15s;white-space:nowrap}
+.tab:hover:not(.active){color:var(--text);background:var(--bg2)}
+.tab.active{color:var(--green);border-bottom:2px solid var(--green)}
+.tab-num{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:0.5px}
+.tab.active .tab-num{color:var(--green-mid)}
+.panel{display:none}.panel.active{display:block}
+.footer{text-align:center;padding:2.5rem 1.5rem;border-top:0.5px solid var(--border);background:var(--bg);margin-top:2rem}
+.footer-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:6px}
+.footer-logo span{color:var(--green)}
+.footer-tagline{font-size:13px;color:var(--text2);margin-bottom:14px}
+.footer-criteria{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.nlp-ms-card{border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;background:var(--bg2)}
+.nlp-ms-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.nlp-ms-title{font-size:14px;font-weight:500}
+.nlp-ms-right{display:flex;gap:10px;align-items:center}
+.nlp-ms-days{font-size:12px;color:var(--text2)}
+.nlp-ms-pay{font-size:13px;font-weight:500;color:var(--green)}
+.nlp-ms-desc{font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.6}
+.aqa-score-wrap{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.aqa-score-big{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;line-height:1}
+.aqa-score-sub{font-size:11px;color:var(--text2);margin-top:2px}
+.check-section{margin-bottom:12px}
+.check-label{font-size:12px;color:var(--text2);margin-bottom:6px}
+.pfi-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:0.5px solid var(--border)}
+.pfi-formula-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.pfi-factor{background:var(--bg2);border-radius:var(--radius);padding:12px;text-align:center}
+.pfi-factor-label{font-size:12px;color:var(--text2);margin-bottom:6px}
+.pfi-factor-weight{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green)}
+</style>
+
+</body>
+</html>

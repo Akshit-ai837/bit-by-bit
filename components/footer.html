@@ -1,0 +1,43 @@
+<!-- ───────────────────────────────────────────
+  COMPONENT: Footer
+  File: components/footer.html
+─────────────────────────────────────────── -->
+
+<footer class="footer">
+  <div class="footer-logo">Trust<span>Chain</span> AI</div>
+  <div class="footer-tagline">Autonomous AI Intermediary · Cognigence Hackathon · IIT Roorkee 2025</div>
+  <div class="footer-criteria">
+    <span class="badge b-green">NLP Precision</span>
+    <span class="badge b-blue">Verification Logic</span>
+    <span class="badge b-amber" style="background:var(--amber-light);color:var(--amber-dark)">Financial Integrity</span>
+    <span class="badge b-gray">PFI Scoring</span>
+  </div>
+</footer>
+
+<style>
+.footer{
+  text-align:center;
+  padding:2.5rem 1.5rem;
+  border-top:0.5px solid var(--border);
+  background:var(--bg);
+  margin-top:2rem;
+}
+.footer-logo{
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:18px;
+  margin-bottom:6px;
+}
+.footer-logo span{color:var(--green)}
+.footer-tagline{
+  font-size:13px;
+  color:var(--text2);
+  margin-bottom:14px;
+}
+.footer-criteria{
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+</style>

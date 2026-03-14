@@ -1,0 +1,111 @@
+<!-- ───────────────────────────────────────────
+  SECTION: Tab 4 — Professional Fidelity Index
+  File: sections/tab_pfi.html
+  Judge Criterion: Scoring Accuracy
+─────────────────────────────────────────── -->
+
+<div id="panel-pfi" class="panel">
+
+  <!-- PFI Leaderboard -->
+  <div class="card">
+    <div class="card-title">Professional Fidelity Index — freelancer credit scores</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:16px">
+      Dynamic reputation score calculated from milestone accuracy, deadline adherence, disputes, and AI quality ratings. Similar to a CIBIL credit score.
+    </p>
+    <div id="pfi-list"></div>
+
+    <!-- Score legend -->
+    <div class="pfi-legend">
+      <span class="badge b-green">800+ Elite</span>
+      <span class="badge b-blue">700–799 Trusted</span>
+      <span class="badge b-gray">600–699 Standard</span>
+      <span class="badge b-red">Below 600 At Risk</span>
+    </div>
+  </div>
+
+  <!-- Score Simulator -->
+  <div class="card">
+    <div class="card-title">Simulate a milestone outcome — watch PFI update live</div>
+
+    <div class="flex mb" style="align-items:flex-end;gap:14px">
+      <div style="flex:1">
+        <label class="field-label">Freelancer</label>
+        <select id="pfi-freelancer">
+          <option>Arjun S.</option>
+          <option>Priya M.</option>
+          <option>Rahul K.</option>
+          <option>Sneha R.</option>
+        </select>
+      </div>
+      <div style="flex:2">
+        <label class="field-label">Milestone outcome</label>
+        <select id="pfi-outcome">
+          <option value="full">Fully completed (on time) → +15 pts</option>
+          <option value="partial">Partially completed → -5 pts</option>
+          <option value="late">Completed but late → -8 pts</option>
+          <option value="unmet">Unmet — dispute raised → -25 pts</option>
+        </select>
+      </div>
+      <div>
+        <button class="btn btn-green" onclick="updatePFI()">Update score</button>
+      </div>
+    </div>
+
+    <div id="pfi-msg" style="font-size:13px;color:var(--text2)"></div>
+  </div>
+
+  <!-- PFI Formula Card -->
+  <div class="card">
+    <div class="card-title">How PFI is calculated</div>
+    <div class="pfi-formula-grid">
+      <div class="pfi-factor">
+        <div class="pfi-factor-label">Milestone accuracy</div>
+        <div class="pfi-factor-weight">40%</div>
+      </div>
+      <div class="pfi-factor">
+        <div class="pfi-factor-label">Deadline adherence</div>
+        <div class="pfi-factor-weight">30%</div>
+      </div>
+      <div class="pfi-factor">
+        <div class="pfi-factor-label">Dispute history</div>
+        <div class="pfi-factor-weight">20%</div>
+      </div>
+      <div class="pfi-factor">
+        <div class="pfi-factor-label">AI quality rating</div>
+        <div class="pfi-factor-weight">10%</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<style>
+.pfi-legend{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:14px;
+  padding-top:12px;
+  border-top:0.5px solid var(--border);
+}
+
+/* PFI formula grid */
+.pfi-formula-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:10px;
+}
+.pfi-factor{
+  background:var(--bg2);
+  border-radius:var(--radius);
+  padding:12px;
+  text-align:center;
+}
+.pfi-factor-label{font-size:12px;color:var(--text2);margin-bottom:6px}
+.pfi-factor-weight{
+  font-family:'Syne',sans-serif;
+  font-size:22px;
+  font-weight:800;
+  color:var(--green);
+}
+</style>
